@@ -1,0 +1,20 @@
+import React from 'react'
+import RegisterForm from '@/components/ui/auth/RegisterForm';
+import LoginForm from '../../components/ui/auth/LoginForm';
+
+function LoginPage() {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background">
+      <div className="absolute inset-0 bg-gradient-to-br from-green to-blue opacity-1" />
+      <div className="z-10 w-full max-w-md px-4">
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-foreground">Welcome back</h1>
+          <p>We're glad to see you again</p>
+        </div>
+        <LoginForm/>
+      </div>
+    </div>
+  );
+}
+
+export default LoginPage
