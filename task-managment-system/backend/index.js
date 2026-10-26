@@ -67,7 +67,7 @@ if (process.env.NODE_ENV === "production") {
   const _dirname = path.dirname(fileURLToPath(import.meta.url));
   app.use(express.static(path.join(_dirname, '../frontend/dist')))
   app.get(/.*/, (req, res) => {
-    res.send(path.join(_dirname,'..','frontend','dist','index.html'))
+    res.sendFile(path.join(_dirname,'..','frontend','dist','index.html'))
   })
 }
 
@@ -77,6 +77,4 @@ app.use(errprHandler);
 
 app.listen(port, () => {
     console.log(`✅ Server is listening on port ${port}`);
-}).on("error", (error) => {
-    console.log("❌ Server error:", error);
 })
