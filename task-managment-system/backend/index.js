@@ -33,7 +33,7 @@ mongoose
       : process.env.MONGO_URI_PRO,
   )
   .then(() => console.log("CONNECTED MONGODB"))
-  .catch(() => console.log("NOT CONNECTED MONGODB"));
+  .catch((err) => console.log("NOT CONNECTED MONGODB", err.message));
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
