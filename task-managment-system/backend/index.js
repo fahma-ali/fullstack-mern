@@ -14,12 +14,12 @@ import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from './utils/swagger.js';
 
 
-import { errprHandler } from "./middleWare/globalError.js";
+import { errprHandler } from "./middleware/globalError.js";
 
 import taskRoute from './route/task.js'
 import authRoute from "./route/auth.js";
 import adminRoute from "./route/authorize.js";
-import { limiter } from './middleWare/rateLimiter.js';
+import { limiter } from './middleware/rateLimiter.js';
 
 
 const app = express();
