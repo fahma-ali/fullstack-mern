@@ -35,40 +35,28 @@ mongoose
   .then(() => console.log("CONNECTED MONGODB"))
   .catch(() => console.log("NOT CONNECTED MONGODB"));
 
-app.use(helmet());
-
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(cors());
-app.use(limiter);
-
-// 🔒 In production:
-app.use(
-  cors({
-    origin: ["http://localhost:4000"],
-  }),
-);
-
-app.get("/", (req, res) => {
-  res.send("hello tast managment system");
-});
+app.use("/api", limiter);
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/task", taskRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/admin", adminRoute);
 
-//server frontend production
-
 if (process.env.NODE_ENV === "production") {
   const _dirname = path.dirname(fileURLToPath(import.meta.url));
-  app.use(express.static(path.join(_dirname, '../frontend/dist')))
+  const distPath = path.join(_dirname, "../frontend/dist");
+
+  app.use(express.static(distPath));
   app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(_dirname,'..','frontend','dist','index.html'))
-  })
+    res.sendFile(path.join(distPath, "index.html"));
+  });
 }
 
 
