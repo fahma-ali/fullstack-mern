@@ -25,7 +25,12 @@ import { limiter } from './middleware/rateLimiter.js';
 const app = express();
 dotenv.config()
 const port=process.env.PORT 
-
+app.get("/api/health", (req, res) => {
+  res.json({
+    dbState: mongoose.connection.readyState,
+    dbName: mongoose.connection.name,
+  });
+});
 mongoose
   .connect(
     process.env.NODE_ENV == "development"
