@@ -1,6 +1,9 @@
 import express from 'express';
+import path, { join } from 'path'
+import { fileURLToPath } from 'url';
 import dotenv from 'dotenv'
 import mongoose from 'mongoose';
+
 //API security
 import cors from "cors";
 import helmet from "helmet";
@@ -57,6 +60,17 @@ app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/task", taskRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/admin", adminRoute);
+
+//server frontend production
+
+if (process.env.NODE_ENV === "production") {
+  const _dirname = path.dirname(fileURLToPath(import.meta.url));
+  app.use(express.static(path.join(_dirname, '../frontend/dist')))
+  app.get(/.*/, (req, res) => {
+    res.send(path.join(_dirname,'..','frontend','dist','index.html'))
+  })
+}
+
 
 app.use(errprHandler);
 

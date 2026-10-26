@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import {
   CardContent,
   CardDescription,
@@ -11,26 +11,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFormStatus } from "react-dom";
 import { ImSpinner2 } from "react-icons/im";
-import { data, useNavigate } from 'react-router';
-import {useMutation} from "@tanstack/react-query"
-import axios from "axios"
-import api from '../../../api/apiClients.js';
-import { extractErrorMessages } from "../../../utils/errorUtils.js";
+import { data, useNavigate } from "react-router";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import api from "../../api/apiClients.js";
+import { extractErrorMessages } from "../../utils/errorUtils.js";
 function RegisterForm() {
-
   const [formValue, setFormValue] = useState({
     name: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
-  const [error, setError] = useState(null)
+  const [error, setError] = useState(null);
   const registerMutation = useMutation({
     mutationFn: async (newUser) => {
-      const response = await api.post(
-        "/auth/register",
-        newUser,
-      );
+      const response = await api.post("/auth/register", newUser);
       console.log(response);
       return response.data;
     },
@@ -44,25 +40,34 @@ function RegisterForm() {
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormValue({...formValue,[name]:value})
-  
- }
+    setFormValue({ ...formValue, [name]: value });
+  };
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    setError(null)
-    if (!formValue.name || !formValue.email || !formValue.password || !formValue.confirmPassword) {
-      setError("All fields are required")
-      return
+    setError(null);
+    if (
+      !formValue.name ||
+      !formValue.email ||
+      !formValue.password ||
+      !formValue.confirmPassword
+    ) {
+      setError("All fields are required");
+      return;
     }
     if (formValue.password !== formValue.confirmPassword) {
-      setError("Passwords do not match")
-      return
+      setError("Passwords do not match");
+      return;
     }
 
     // TODO:Mutation
-    registerMutation.mutate({name:formValue.name,email:formValue.email,password:formValue.password,confirmPassword:formValue.confirmPassword});
-  }
-const navigate = useNavigate();
+    registerMutation.mutate({
+      name: formValue.name,
+      email: formValue.email,
+      password: formValue.password,
+      confirmPassword: formValue.confirmPassword,
+    });
+  };
+  const navigate = useNavigate();
 
   return (
     <Card className="w-full border-border">
@@ -119,15 +124,20 @@ const navigate = useNavigate();
             </div>
 
             <div className="py-4">
-   <Button type="submit" disabled={registerMutation.isPending} className="w-full cursor-pointer">
-      {registerMutation.isPending ? (
-        <span className="flex items-center gap-2">
-          <ImSpinner2 className="animate-spin" /> Creating Account ...
-        </span>
-      ) : (
-        "Create Account"
-      )}
-    </Button>            </div>
+              <Button
+                type="submit"
+                disabled={registerMutation.isPending}
+                className="w-full cursor-pointer"
+              >
+                {registerMutation.isPending ? (
+                  <span className="flex items-center gap-2">
+                    <ImSpinner2 className="animate-spin" /> Creating Account ...
+                  </span>
+                ) : (
+                  "Create Account"
+                )}
+              </Button>{" "}
+            </div>
           </CardContent>
 
           <CardFooter>

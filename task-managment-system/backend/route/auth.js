@@ -71,8 +71,8 @@ router.post("/login", login);
  *       200:
  *         description: Current user info
  */
-router.get("/profile", protect, (req, res) => {
-  res.json(`welcome protected profile ${req.user.name}`);
-  console.log(`user info  ${req.user}`);
+router.get("/profile", protect,async (req, res) => {
+  await new Promise(resolve => setTimeout(resolve, 5000))
+  res.json(`${req.user}`);
 });
 export default router;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   CardContent,
   CardDescription,
@@ -11,73 +11,61 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFormStatus } from "react-dom";
 import { ImSpinner2 } from "react-icons/im";
-import { useNavigate } from 'react-router';
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import api from '../../../api/apiClients.js';
-import { extractErrorMessages } from '../../../utils/errorUtils.js';
-import useAuthStore from '../../../store/authstore.js';
+import { useNavigate } from "react-router";
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import api from "../../api/apiClients.js";
+import { extractErrorMessages } from "../../utils/errorUtils.js";
+import useAuthStore from "@/store/authStore.js";
 
 function LoginForm() {
   const navigate = useNavigate();
   const [isloading, setIsloading] = useState();
 
-    const [formValue, setFormValue] = useState({
-      email: "",
-      password: "",
-    });
-    const [error, setError] = useState(null)
-  const {login } = useAuthStore();
-  
-    const handleChange = (e) => {
+  const [formValue, setFormValue] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState(null);
+  const { login } = useAuthStore();
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormValue({...formValue,[name]:value})
-  
-  }
+    setFormValue({ ...formValue, [name]: value });
+  };
 
-    const loginMutation = useMutation({
-      mutationFn: async (newUser) => {
-        const response = await api.post("/auth/login", newUser);
-        console.log(response);
-        return response.data;
-      },
-      onSuccess: (data) => {
-        console.log("LOGIN SUCCESS:", data);
+  const loginMutation = useMutation({
+    mutationFn: async (newUser) => {
+      const response = await api.post("/auth/login", newUser);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      if (data.token) {
+        const user = data.user;
+        const token = data.token;
+        login(user, token);
+        navigate("/dashboard");
+      }
+    },
+    onError: (err) => {
+      console.dir(err); // forces an expandable object
+      setError(extractErrorMessages(err));
+    },
+  });
+  const handleSubmitForm = (e) => {
+    e.preventDefault();
+    setError(null);
+    if (!formValue.email || !formValue.password) {
+      setError("All fields are required");
+      return;
+    }
 
-        if (data.token) {
-          const user = data.user;
-          const token = data.token;
-
-          console.log("BEFORE ZUSTAND LOGIN:", user);
-
-          login(user, token);
-
-          console.log("AFTER ZUSTAND LOGIN:", useAuthStore.getState());
-
-          navigate("/dashboard");
-        }
-      },
-      onError: (err) => {
-        console.dir(err); // forces an expandable object
-        setError(extractErrorMessages(err));
-      },
+    // TODO:Mutation
+    loginMutation.mutate({
+      email: formValue.email,
+      password: formValue.password,
     });
-   const handleSubmitForm = (e) => {
-     e.preventDefault();
-     setError(null);
-     if (
-       !formValue.email ||
-       !formValue.password ) {
-       setError("All fields are required");
-       return;
-     }
-   
-     // TODO:Mutation
-     loginMutation.mutate({
-       email: formValue.email,
-       password: formValue.password,
-     });
-   };
+  };
   return (
     <Card className="w-full border-border">
       <CardHeader className="space-y-1 pb-4">
@@ -143,5 +131,5 @@ function LoginForm() {
       </CardHeader>
     </Card>
   );
-};
+}
 export default LoginForm;

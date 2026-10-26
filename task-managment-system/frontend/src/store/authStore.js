@@ -10,15 +10,11 @@ const useAuthStore = create(
             isAuthenticated: false,
             //set user data and token after successfull login
             login: (user, token) => {
-                console.log("STORE LOGIN RUNS:", user);
-
                 set({
                     user: user,
                     token: token,
                     isAuthenticated: true,
                 });
-
-                console.log("STATE IMMEDIATELY AFTER SET:", get());
             },
             // clear user data and token after logout
             logOut: () => set({
