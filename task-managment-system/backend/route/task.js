@@ -1,6 +1,6 @@
 import express from 'express';
 import { createTask, deleteTask, getMyTask, updateTask } from '../controller/taskController.js';
-import { protect } from '../middleWare/auth.js';
+import { protect } from '../middleware/auth.js';
 const router = express.Router();
 /**
  * @swagger
