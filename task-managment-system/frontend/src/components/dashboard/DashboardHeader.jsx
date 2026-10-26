@@ -1,7 +1,7 @@
 import React from "react";
 import { ClipboardCheck } from "lucide-react";
 import useAuthStore from "@/store/authStore";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 function DashboardHeader() {
